@@ -2,6 +2,8 @@ import { LeadStage } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 type PatchBody = {
   stage?: LeadStage;
   booked?: boolean;
@@ -35,4 +37,3 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
   return NextResponse.json({ lead });
 }
-

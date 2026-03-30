@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { generateReply } from "@/lib/ai/service";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   const body = (await req.json()) as { customerMessage?: string; mode?: "soft" | "push" };
   const customerMessage = body.customerMessage?.trim();
@@ -26,4 +28,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json(result);
 }
-

@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { listLeadsWithRecommendation } from "@/lib/leads/service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const leads = await listLeadsWithRecommendation();
   return NextResponse.json({ leads });
@@ -27,4 +29,3 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ lead });
 }
-
