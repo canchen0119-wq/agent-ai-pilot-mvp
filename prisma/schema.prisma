@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -81,4 +81,3 @@ model AIRecord {
   complianceFlags  String       @default("[]")
   createdAt        DateTime     @default(now())
 }
-
