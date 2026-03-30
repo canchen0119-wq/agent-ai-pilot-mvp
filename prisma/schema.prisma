@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStage {
+  NEW
+  CONTACTED
+  FOLLOWING
+  BOOKED
+  CLOSED
+}
+
+enum FollowUpType {
+  DAY1
+  DAY3
+  DAY7
+  NONE
+}
+
+enum TaskType {
+  CONTENT
+  REPLY
+  FOLLOW_UP
+}
+
+enum AIRecordType {
+  CONTENT
+  CHAT
+}
+
+enum ChatMode {
+  SOFT
+  PUSH
+}
+
+model Lead {
+  id               String       @id @default(cuid())
+  name             String
+  phone            String?
+  source           String?
+  stage            LeadStage    @default(NEW)
+  needsReply       Boolean      @default(false)
+  replied          Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  lastContactAt    DateTime?
+  nextFollowUpType FollowUpType @default(NONE)
+  booked           Boolean      @default(false)
+
+  tasks DailyTask[]
+}
+
+model DailyTask {
+  id            String    @id @default(cuid())
+  date          DateTime
+  type          TaskType
+  title         String
+  relatedLeadId String?
+  completed     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  relatedLead Lead? @relation(fields: [relatedLeadId], references: [id], onDelete: SetNull)
+
+  @@index([date, type])
+  @@index([relatedLeadId])
+}
+
+model AIRecord {
+  id               String       @id @default(cuid())
+  type             AIRecordType
+  inputText        String
+  outputText       String
+  mode             ChatMode?
+  compliancePassed Boolean
+  complianceFlags  String       @default("[]")
+  createdAt        DateTime     @default(now())
+}
+
